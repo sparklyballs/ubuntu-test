@@ -1,4 +1,4 @@
-ARG UBUNTU_VER="bionic"
+ARG UBUNTU_VER="xenial"
 FROM ubuntu:${UBUNTU_VER} as fetch-stage
 
 # environment settings
