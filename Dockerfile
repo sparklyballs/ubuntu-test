@@ -22,9 +22,6 @@ RUN \
 		/var/lib/apt/lists/* \
 		/var/tmp/*
 
-# set shell
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
 # fetch version file
 RUN \
 	set -ex \
