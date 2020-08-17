@@ -54,11 +54,10 @@ TERM="xterm"
 
 # install runtime packages
 RUN \
-	set -ex \
-	&& apt-get update \
+	apt-get update \
 	&& apt-get install -y \
 	--no-install-recommends \
-	apt-utils \
+		apt-utils \
 		ca-certificates \
 		curl \
 		gnupg2 \
@@ -72,7 +71,7 @@ RUN \
 		/var/lib/apt/lists/* \
 		/var/tmp/*
 
-# generate locale and enable multiverse repositories
+# generate locale and enable multiverse repository
 RUN \
 	set -ex \
 	&& locale-gen en_US.UTF-8 \
