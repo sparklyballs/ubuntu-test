@@ -37,16 +37,18 @@ RUN \
 	&& mkdir -p \
 		/overlay-src \
 	&& curl -o \
-	/tmp/s6-overlay-amd64-installer -L \
-	"https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_RELEASE}/s6-overlay-amd64-installer"
+	/tmp/s6-overlay-amd64.tar.gz -L \
+	"https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_RELEASE}/s6-overlay-amd64.tar.gz"
 
 FROM ubuntu:${UBUNTU_VER}
 
 # add artifacts from fetch stage
-COPY --from=fetch-stage /tmp/s6-overlay-amd64-installer /tmp/s6-overlay-amd64-installer
+COPY --from=fetch-stage /tmp/s6-overlay-amd64.tar.gz /tmp/s6-overlay-amd64.tar.gz
 
 # install overlay
-RUN chmod +x /tmp/s6-overlay-amd64-installer /tmp/s6-overlay-amd64-installer /
+RUN \
+	tar xzf /tmp/s6-overlay-amd64.tar.gz -C / --exclude="./bin" \
+	&& tar xzf /tmp/s6-overlay-amd64.tar.gz -C /usr ./bin
 
 # environment variables
 ARG DEBIAN_FRONTEND="noninteractive"
