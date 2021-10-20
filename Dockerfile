@@ -58,6 +58,7 @@ RUN \
 	&& apt-get install -y \
 	--no-install-recommends \
 		apt-utils \
+		bash \
 		ca-certificates \
 		curl \
 		gnupg2 \
