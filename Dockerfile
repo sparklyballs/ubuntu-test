@@ -44,13 +44,13 @@ RUN \
 		/overlay-src \
 	&& curl -o \
 	/tmp/overlay.tar.xz -L \
-	"https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_RELEASE}/s6-overlay-${OVERLAY_ARCH}-${S6_OVERLAY_RELEASE}.tar.xz" \
+	"https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_RELEASE}/s6-overlay-${OVERLAY_ARCH}.tar.xz" \
 	&& curl -o \
 	/tmp/noarch.tar.xz -L \
-	"https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_RELEASE}/s6-overlay-noarch-${S6_OVERLAY_RELEASE}.tar.xz" \
+	"https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_RELEASE}/s6-overlay-noarch.tar.xz" \
 	&& curl -o \
 	/tmp/symlinks.tar.xz -L \
-	"https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_RELEASE}/s6-overlay-symlinks-noarch-${S6_OVERLAY_RELEASE}.tar.xz" \
+	"https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_RELEASE}/s6-overlay-symlinks-noarch.tar.xz" \
 	&& tar xf \
 	/tmp/overlay.tar.xz -C \
 	/overlay-src \
@@ -59,8 +59,7 @@ RUN \
 	/overlay-src \
 	&& tar xf \
 	/tmp/symlinks.tar.xz -C \
-	/overlay-src \
-	&& sed -i 's#/command:/usr/bin:/bin#/command:/usr/bin:/bin:/usr/sbin#g' /overlay-src/etc/s6-overlay/config/global_path
+	/overlay-src
 
 FROM ubuntu:${UBUNTU_VER}
 
@@ -71,7 +70,8 @@ ARG DEBIAN_FRONTEND="noninteractive"
 ENV HOME="/root" \
 LANGUAGE="en_US.UTF-8" \
 LANG="en_US.UTF-8" \
-TERM="xterm"
+TERM="xterm" \
+PATH=/usr/sbin:$PATH
 
 # install runtime packages
 RUN \
