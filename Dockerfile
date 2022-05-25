@@ -1,4 +1,4 @@
-ARG UBUNTU_VER="focal"
+ARG UBUNTU_VER="jammy"
 FROM ubuntu:${UBUNTU_VER} as fetch-stage
 
 ############## fetch stage ##############
