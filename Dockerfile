@@ -1,5 +1,6 @@
-ARG UBUNTU_VER="jammy"
-FROM ubuntu:${UBUNTU_VER} as fetch-stage
+# hadolint global ignore=DL3006
+ARG RELEASE=ubuntu:jammy
+FROM $RELEASE as fetch-stage
 
 ############## fetch stage ##############
 
@@ -41,7 +42,7 @@ RUN \
 	. /tmp/version.txt \
 	&& set -ex \
 	&& mkdir -p \
-		/overlay-src \
+		/src/overlay \
 	&& curl -o \
 	/tmp/overlay.tar.xz -L \
 	"https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_RELEASE}/s6-overlay-${OVERLAY_ARCH}.tar.xz" \
@@ -53,15 +54,15 @@ RUN \
 	"https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_RELEASE}/s6-overlay-symlinks-noarch.tar.xz" \
 	&& tar xf \
 	/tmp/overlay.tar.xz -C \
-	/overlay-src \
+	/src/overlay \
 	&& tar xf \
 	/tmp/noarch.tar.xz -C \
-	/overlay-src \
+	/src/overlay \
 	&& tar xf \
 	/tmp/symlinks.tar.xz -C \
-	/overlay-src
+	/src/overlay
 
-FROM ubuntu:${UBUNTU_VER}
+FROM $RELEASE
 
 ############## runtime stage ##############
 
@@ -72,6 +73,9 @@ LANGUAGE="en_US.UTF-8" \
 LANG="en_US.UTF-8" \
 TERM="xterm" \
 PATH=/usr/sbin:$PATH
+
+# set shell
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # install runtime packages
 RUN \
@@ -109,7 +113,7 @@ RUN \
 		/defaults
 
 # add artifacts from fetch stage
-COPY --from=fetch-stage /overlay-src/ /
+COPY --from=fetch-stage /src/overlay/ /
 
 # add local files
 COPY root/ /
